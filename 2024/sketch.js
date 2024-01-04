@@ -30,14 +30,13 @@ function drawTexturableQuad(four_points) {
 
   noStroke();
   beginShape();
-  vertex(bottomLeft.x, bottomLeft.y, 0, 0);
   vertex(topLeft.x, topLeft.y, 0, 1);
+  vertex(bottomLeft.x, bottomLeft.y, 0, 0);
   vertex(bottomRight.x, bottomRight.y, 1, 0);
   vertex(topRight.x, topRight.y, 1, 1);
   endShape();
 }
 
-let image_updated = false;
 function draw() {
   for (let i = 0; i < points.length - 3; i += 4) {
     texture(img);
