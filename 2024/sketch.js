@@ -3,7 +3,7 @@ let x_offset;
 let y_offset;
 
 function preload() {
-  img = loadImage("assets/natural_glaciers.jpeg");
+  img = loadImage("assets/retro_tv.jpeg");
 }
 
 function setup() {
@@ -19,16 +19,32 @@ function mouseClicked() {
   points.push({ x: mouseX + x_offset, y: mouseY + y_offset});
 }
 
+function drawTexturableQuad(four_points) {
+  four_points = four_points.sort((p1, p2) => (p1.y === p2.y) ? p1.x - p2.x : p1.y - p2.y);
+
+  const bottom_points = four_points.slice(0, 2);
+  const top_points = four_points.slice(2, 4);
+
+  const [bottomLeft, bottomRight] = bottom_points.sort((p1, p2) => p1.x - p2.x);
+  const [topLeft, topRight] = top_points.sort((p1, p2) => p1.x - p2.x);
+
+  noStroke();
+  beginShape();
+  vertex(bottomLeft.x, bottomLeft.y, 0, 0);
+  vertex(topLeft.x, topLeft.y, 0, 1);
+  vertex(bottomRight.x, bottomRight.y, 1, 0);
+  vertex(topRight.x, topRight.y, 1, 1);
+  endShape();
+}
+
+let image_updated = false;
 function draw() {
-  if (points.length == 4) {
+  for (let i = 0; i < points.length - 3; i += 4) {
     texture(img);
-    beginShape();
-    vertex(points[0].x, points[0].y, 1, 1);
-    vertex(points[1].x, points[1].y, 0, 1);
-    vertex(points[2].x, points[2].y, 1, 0);
-    vertex(points[3].x, points[3].y, 0, 0);
-    endShape();
+    drawTexturableQuad(points.slice(i, i + 4));
+  }
+
+  if (frameCount % 5 == 0) {
     img = get();
-    points = [];
   }
 }
